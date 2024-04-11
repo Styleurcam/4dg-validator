@@ -5,7 +5,6 @@ import sys
 def main() -> None:
     with open(sys.argv[1]) as arg:
         file: str = arg.read()
-        print(file)
 
     validate_4d = re.compile(pattern=r'''
     ^(?!(?:^#.*?(?:\n|$))*(?:(?:^(?:(?:Adapter|Straight(?:Bare)?)([2468])To(?!\1)[2468]|Bank(?:Down|Up)(?:Bare)?[2468]|B
@@ -77,10 +76,8 @@ def main() -> None:
             print("invalid Hole parameters")
 
         if n := re.search(validate_5d, file):
-            print(n)
             print(f"this is an invalid 5D 4dg level file, first error at line {file[:file.find(n.group(0))].count(newline) + 1}:\n{n[0][:-1]}")
         else:
-            print(n)
             print("this is a valid 5D 4dg level file")
 
     elif final_theme in themes_4d:
@@ -94,10 +91,8 @@ def main() -> None:
             print("invalid Hole parameters")
 
         if n := re.search(validate_4d, file):
-            print(n)
             print(f"this is an invalid 4D 4dg level file: line {file[:file.find(n.group(0))].count(newline) + 1}\n\"{n[0][:-1]}\"")
         else:
-            print(n)
             print("this is a valid 4D 4dg level file")
 
     else:
