@@ -3,8 +3,9 @@ import sys
 
 
 def main() -> None:
-    with open(sys.argv[1]) as arg:
-        file: str = arg.read()[3:]
+    with open("C:\\Users\\skyma\\AppData\\LocalLow\\CodeParade\\4D Golf\\CustomLevels\\Test5D.4dg") as arg:
+        file: str = arg.read()
+        print(file)
 
     validate_4d = re.compile(pattern=r'''
     ^(?!(?:^#.*?(?:\n|$))*(?:(?:^(?:(?:Adapter|Straight(?:Bare)?)([2468])To(?!\1)[2468]|Bank(?:Down|Up)(?:Bare)?[2468]|B
@@ -16,7 +17,7 @@ def main() -> None:
     |Duocyl)inder|DoubleRotator|Elevator|Igloo|Platform|PopBumper|Shim|Spinner(?:Side|sIn|sOut|Large)|SpringBoard|Tetra|
     Trirect|Wedge|Cube)4|(?:Glome|Horn|SpinDisk|Well)6|Pyramid8|Windmill2|Null|)(?:,[0-3])?(?:\.|!|!\.|\.!)?[@^$*~]?|<([
     0-4]),(?!\4)[0-4],\d+?(?:\.\d+?)?>|<\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?>)(?:\n|$)))(?:.*
-    ?(?:\n|$))'''.replace('\n', ''), flags=re.M)
+    ?(?:\n|$))'''.replace('\n    ', ''), flags=re.M)
 
     validate_5d = re.compile(pattern=r'''^(?!(?:#.*?(?:\n|$))*(?:^(?:(?:(?:Adapter|Straight(?:Bare)?)([2468])To(?!\1)[24
     68]|Bend(?:Wide)?(?:Bare)?[2468]|EndContinue(?:Bare)?2(?:To4)?|EndContinue(?:Bare)?4(?:To[26])?|EndContinue(?:Bare)?
@@ -26,7 +27,7 @@ def main() -> None:
     ck|White)(?:Knight|Pawn)|WhiteKing|Cube|Eye|Platform|SpinnerLarge[AB]|Duocylinder|SpringBoard|(?:Tetra|Tri)rect)4|Sp
     inDisk6|Null|)(?:,(?:1?[0-9]|2[0-3]))?(?:\.|!|!\.|\.!)?[@^$*~]?|<([0-4]),(?!\4)[0-4],\d+?(?:\.\d+?)?>|<\d+?(?:\.\d+?
     )?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?>)(?:\n|$))).*?(?:\n|$)
-    '''.replace('\n', ''), flags=re.M)
+    '''.replace('\n    ', ''), flags=re.M)
 
     valid_themes = [
         "#Theme Forest4D",
@@ -63,31 +64,40 @@ def main() -> None:
     if not re.match(r'^#Name(.|\s)*?$', file, flags=re.M):
         print("no name defined")
 
+    newline = '\n'
     if final_theme in themes_5d:
-        if not re.findall(r'^#Ball \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$',
-                          file, flags=re.M):
+        if not re.findall(
+                r'^#Ball \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$',
+                file, flags=re.M) and "." not in file:
             print("invalid Ball parameters")
 
-        if not re.findall(r'^#Hole \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)? \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$',
-                        file, flags=re.M):
+        if not re.findall(
+                r'^#Hole \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)? \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$',
+                file, flags=re.M) and "!" not in file:
             print("invalid Hole parameters")
 
-        if validate_5d.match(file):
-            print("this is an invalid 5D 4dg level file")
+        if n := re.search(validate_5d, file):
+            print(n)
+            print(f"this is an invalid 5D 4dg level file, first error at line {file[:file.find(n.group(0))].count(newline) + 1}:\n{n[0][:-1]}")
         else:
+            print(n)
             print("this is a valid 5D 4dg level file")
 
     elif final_theme in themes_4d:
-        if not re.findall(r'^#Ball \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$', file, flags=re.M):
+        if not re.findall(r'^#Ball \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$', file,
+                          flags=re.M) and "." not in file:
             print("invalid Ball parameters")
 
-        if not re.findall(r'^#Hole \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)? \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$',
-                        file, flags=re.M):
+        if not re.findall(
+                r'^#Hole \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)? \d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?,\d+?(?:\.\d+?)?\s*?$',
+                file, flags=re.M) and "!" not in file:
             print("invalid Hole parameters")
 
-        if validate_4d.match(file):
-            print("this is an invalid 4D 4dg level file")
+        if n := re.search(validate_4d, file):
+            print(n)
+            print(f"this is an invalid 4D 4dg level file: line {file[:file.find(n.group(0))].count(newline) + 1}\n\"{n[0][:-1]}\"")
         else:
+            print(n)
             print("this is a valid 4D 4dg level file")
 
     else:
