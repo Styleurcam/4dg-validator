@@ -3,7 +3,7 @@ import sys
 
 
 def main() -> None:
-    with open("C:\\Users\\skyma\\AppData\\LocalLow\\CodeParade\\4D Golf\\CustomLevels\\Test5D.4dg") as arg:
+    with open(sys.argv[1]) as arg:
         file: str = arg.read()
         print(file)
 
